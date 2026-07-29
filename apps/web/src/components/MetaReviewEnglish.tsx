@@ -77,6 +77,36 @@ const exactTranslations: Record<string, string> = {
   "Linora ใช้ข้อมูลจากเพจที่เลือกเท่านั้น และจะไม่โพสต์แทนคุณโดยอัตโนมัติ": "Linora uses data from the selected Page only and never posts on your behalf automatically.",
   "กำลังจัดทำรายงานล่าสุดของเพจ": "Preparing the latest Page report",
   "กำลังตรวจข้อมูลล่าสุดของเพจ รายงานเดิมยังใช้งานได้": "Refreshing the latest Page data. Your previous report remains available.",
+  "คำแนะนำ": "Recommendation",
+  "จ.": "Mon",
+  "อ.": "Tue",
+  "พ.": "Wed",
+  "พฤ.": "Thu",
+  "ศ.": "Fri",
+  "ส.": "Sat",
+  "อา.": "Sun",
+  "Linora ใช้ข้อมูลเท่าที่จำเป็นเพื่อวิเคราะห์เพจ Facebook ที่คุณเลือก": "Linora uses only the data needed to analyze the Facebook Page you select.",
+  "Linora ดำเนินการโดย บริษัท คนบ้างาน จำกัด": "Linora is operated by Kon Ba Ngan Co., Ltd.",
+  "Linora อ่านรายชื่อเพจ Facebook ที่คุณจัดการ เพื่อให้คุณเลือกเพจที่ต้องการวิเคราะห์": "Linora reads the list of Facebook Pages you manage so you can choose a Page to analyze.",
+  "Linora ใช้ข้อมูลโพสต์ การมีส่วนร่วม และความคิดเห็นที่จำเป็นเพื่อจัดทำรายงานและคำแนะนำสำหรับเพจที่คุณเลือก": "Linora uses the posts, engagement, and comments needed to create reports and recommendations for the Page you select.",
+  "เมื่อสร้างคำแนะนำด้วย AI เราอาจส่งเฉพาะข้อมูลที่เกี่ยวข้องจากเพจ เช่น ข้อความโพสต์ ความคิดเห็น และตัวเลขสรุป ไปยังผู้ให้บริการ AI ภายนอกที่ Linora ใช้งาน เพื่อประมวลผลคำแนะนำให้คุณ": "To create AI recommendations, Linora may send only relevant Page data, such as post text, comments, and summary metrics, to its external AI provider for processing.",
+  "Linora เก็บ Page access token ในรูปแบบเข้ารหัส และไม่แสดง token หรือข้อมูลการเชื่อมต่อ Facebook ของคุณในหน้าเว็บ": "Linora stores Page access tokens encrypted and does not display your token or Facebook connection details in the web app.",
+  "Linora ไม่ขายข้อมูล และไม่นำข้อมูลจากเพจ Facebook ไปใช้เพื่อโฆษณาหรือวิเคราะห์พฤติกรรมนอกบริการ": "Linora does not sell data or use Facebook Page data for advertising or behavioral analysis outside this service.",
+  "คุณสามารถยกเลิกการเชื่อมต่อหรือลบข้อมูลของเพจที่เชื่อมต่อได้ทุกเมื่อ": "You can disconnect or delete data for a connected Page at any time.",
+  "เงื่อนไขการใช้ Linora สำหรับวิเคราะห์เพจ Facebook": "Terms for using Linora to analyze Facebook Pages.",
+  "คุณต้องเป็นผู้ดูแลหรือมีสิทธิ์จัดการเพจที่เลือก": "You must manage the selected Page or have permission to manage it.",
+  "รายงานจาก Linora เป็นคำแนะนำเชิงวิเคราะห์ ผู้ใช้ควรตรวจสอบก่อนนำไปใช้งานจริง": "Linora reports are analytical recommendations. Please review them before applying them in practice.",
+  "Linora จะไม่โพสต์ ตอบกลับ หรือแก้ไขข้อมูลบนเพจ Facebook โดยอัตโนมัติ": "Linora will not automatically post, reply to, or edit information on Facebook Pages.",
+  "เมื่อคุณใช้คำแนะนำ AI คุณยอมรับว่าข้อมูลที่จำเป็นจากเพจที่เลือกอาจถูกประมวลผลโดยผู้ให้บริการ AI ภายนอกเพื่อสร้างคำแนะนำ": "When you use AI recommendations, you acknowledge that necessary data from the selected Page may be processed by an external AI provider to create recommendations.",
+  "หากมีฟีเจอร์ตอบกลับในอนาคต Linora จะให้ผู้ใช้ยืนยันก่อนส่งข้อความเสมอ": "If reply features are added in the future, Linora will always require user confirmation before sending a message.",
+  "วิธีลบข้อมูลที่ Linora ใช้สำหรับวิเคราะห์เพจ Facebook": "How to delete data Linora uses to analyze Facebook Pages.",
+  "เปิด Linora จาก LINE เลือกเพจที่ต้องการ แล้วกดไอคอนการตั้งค่าและปุ่ม ลบข้อมูล Linora": "Open Linora from LINE, select a Page, then use the settings icon and Delete Linora data button.",
+  "คำขอลบข้อมูลจะลบ Page access token ที่เข้ารหัส รายงาน ข้อมูลเพจ และตัวเลขที่ Linora เก็บไว้สำหรับเพจนั้น": "A deletion request removes the encrypted Page access token, reports, Page data, and metrics Linora stores for that Page.",
+  "หากไม่สามารถเข้า LINE ได้ โปรดส่งคำขอลบข้อมูลพร้อม LINE user ID หรือชื่อเพจไปที่ support@linora.app": "If you cannot access LINE, send a data deletion request with your LINE user ID or Page name to support@linora.app.",
+  "Linora จะไม่เก็บข้อมูลของเพจที่ลบไว้เพื่อใช้วิเคราะห์ต่อ": "Linora does not retain deleted Page data for further analysis.",
+  "รับคำขอลบข้อมูลแล้ว": "Data deletion request received",
+  "Linora ดำเนินการลบข้อมูลที่เชื่อมโยงกับคำขอนี้เรียบร้อยแล้ว": "Linora has completed deletion of the data associated with this request.",
+  "กลับหน้าหลัก": "Return to home",
 };
 
 function translateText(value: string) {
@@ -89,6 +119,7 @@ function translateText(value: string) {
     .replace(/^กำลังอ่านข้อมูลล่าสุดของ (.+) เพื่อจัดทำรายงานให้คุณ$/, "Reading the latest data from $1 to prepare your report")
     .replace(/^Linora จะลองอัปเดตข้อมูลของ (.+) อีกครั้งในไม่ช้า$/, "Linora will try to update $1 again shortly")
     .replace(/^กำลังวิเคราะห์เพจหมวด /, "Analyzing Page category: ")
+    .replace(/^รหัสยืนยัน:\s*/, "Confirmation code: ")
     .replace(/\bมกราคม\b/g, "January").replace(/\bกุมภาพันธ์\b/g, "February").replace(/\bมีนาคม\b/g, "March")
     .replace(/\bเมษายน\b/g, "April").replace(/\bพฤษภาคม\b/g, "May").replace(/\bมิถุนายน\b/g, "June")
     .replace(/\bกรกฎาคม\b/g, "July").replace(/\bสิงหาคม\b/g, "August").replace(/\bกันยายน\b/g, "September")

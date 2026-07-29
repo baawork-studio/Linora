@@ -398,11 +398,14 @@ function AppRoutes() {
 }
 
 function PublicLegalPage({ type }: { type: "privacy" | "terms" | "data-deletion" }) {
+  const isMetaReviewMode = typeof window !== "undefined" && Boolean(window.sessionStorage.getItem("linora.meta-review-session"));
   return (
     <MobileAppShell>
-      <Suspense fallback={<RouteLoading />}>
+      {isMetaReviewMode ? <MetaReviewEnglish><Suspense fallback={<RouteLoading />}>
         <LegalPage type={type} />
-      </Suspense>
+      </Suspense></MetaReviewEnglish> : <Suspense fallback={<RouteLoading />}>
+        <LegalPage type={type} />
+      </Suspense>}
     </MobileAppShell>
   );
 }
