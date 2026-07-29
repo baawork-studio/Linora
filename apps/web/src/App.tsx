@@ -23,6 +23,9 @@ const facebookTransitionDelay = 650;
 const AnalyzingPage = lazy(async () => ({ default: (await import("./pages/AnalyzingPage")).AnalyzingPage }));
 const ConnectFacebookPage = lazy(async () => ({ default: (await import("./pages/ConnectFacebookPage")).ConnectFacebookPage }));
 const DashboardPage = lazy(async () => ({ default: (await import("./pages/DashboardPage")).DashboardPage }));
+const MetaReviewConnectPage = lazy(async () => ({ default: (await import("./pages/MetaReviewConnectPage")).MetaReviewConnectPage }));
+const MetaReviewDashboardPage = lazy(async () => ({ default: (await import("./pages/MetaReviewDashboardPage")).MetaReviewDashboardPage }));
+const MetaReviewPageSelectPage = lazy(async () => ({ default: (await import("./pages/MetaReviewPageSelectPage")).MetaReviewPageSelectPage }));
 const LegalPage = lazy(async () => ({ default: (await import("./pages/LegalPage")).LegalPage }));
 const PageSelectPage = lazy(async () => ({ default: (await import("./pages/PageSelectPage")).PageSelectPage }));
 
@@ -320,7 +323,14 @@ function AppRoutes() {
             element={
               canViewDashboard && selectedPage ? (
                 latestReport ? (
-                  <DashboardPage
+                  isMetaReviewMode ? <MetaReviewDashboardPage
+                    analysisStatus={analysisStatus}
+                    onDeleteData={deleteSelectedPageData}
+                    onDisconnect={disconnectSelectedPage}
+                    page={selectedPage}
+                    report={latestReport}
+                    weeklyReport={weeklyReport}
+                  /> : <DashboardPage
                     analysisStatus={analysisStatus}
                     onDeleteData={deleteSelectedPageData}
                     onDisconnect={disconnectSelectedPage}
@@ -339,7 +349,12 @@ function AppRoutes() {
           />
           <Route
             element={
-              <ConnectFacebookPage
+              isMetaReviewMode ? <MetaReviewConnectPage
+                hasFacebookLogin={hasFacebookLogin}
+                isLoading={isCompletingFacebookLogin}
+                loginError={facebookLoginError}
+                onLogin={startFacebookLogin}
+              /> : <ConnectFacebookPage
                 hasFacebookLogin={hasFacebookLogin}
                 isLoading={isCompletingFacebookLogin}
                 loginError={facebookLoginError}
@@ -350,7 +365,12 @@ function AppRoutes() {
           />
           <Route
             element={
-              <ConnectFacebookPage
+              isMetaReviewMode ? <MetaReviewConnectPage
+                hasFacebookLogin={hasFacebookLogin}
+                isLoading={isCompletingFacebookLogin}
+                loginError={facebookLoginError}
+                onLogin={startFacebookLogin}
+              /> : <ConnectFacebookPage
                 hasFacebookLogin={hasFacebookLogin}
                 isLoading={isCompletingFacebookLogin}
                 loginError={facebookLoginError}
@@ -362,7 +382,15 @@ function AppRoutes() {
           <Route
             element={
               hasFacebookLogin ? (
-                <PageSelectPage
+                isMetaReviewMode ? <MetaReviewPageSelectPage
+                  onAuthorize={authorizeSelectedPage}
+                  onSelectPage={(page) => {
+                    setSelectedPage(page);
+                    setHasPagePermission(false);
+                  }}
+                  selectedPage={selectedPage}
+                  pages={facebookPages}
+                /> : <PageSelectPage
                   onAuthorize={authorizeSelectedPage}
                   onSelectPage={(page) => {
                     setSelectedPage(page);
