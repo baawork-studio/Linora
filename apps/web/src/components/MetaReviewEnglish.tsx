@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useRef } from "react";
+import { type ReactNode, useEffect } from "react";
 
 const exactTranslations: Record<string, string> = {
   "กรุณารอสักครู่": "Please wait",
@@ -138,11 +138,10 @@ function translateElement(element: Element) {
 }
 
 export function MetaReviewEnglish({ children }: { children: ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    const root = ref.current;
-    if (!root) return;
+    // MUI Drawer and Tooltip render through portals under document.body.
+    // Review translation must include those portal surfaces as well.
+    const root = document.body;
     const translate = () => {
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       const textNodes: Text[] = [];
@@ -160,5 +159,5 @@ export function MetaReviewEnglish({ children }: { children: ReactNode }) {
     return () => observer.disconnect();
   }, []);
 
-  return <div ref={ref} style={{ display: "contents" }}>{children}</div>;
+  return <>{children}</>;
 }
