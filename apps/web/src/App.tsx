@@ -86,6 +86,8 @@ function AppRoutes() {
   const [facebookHandoffCode, setFacebookHandoffCode] = useState<string | null>(null);
   const [isCompletingFacebookLogin, setIsCompletingFacebookLogin] = useState(false);
   const [isLineIdentityReady, setIsLineIdentityReady] = useState(false);
+  const [identityError, setIdentityError] = useState<string | null>(null);
+  const [isMetaReviewMode, setIsMetaReviewMode] = useState(false);
   const completedFacebookHandoff = useRef<string | null>(null);
   const [selectedPage, setSelectedPage] = useState<FacebookPageSummary | null>(null);
   const [hasPagePermission, setHasPagePermission] = useState(false);
@@ -106,8 +108,9 @@ function AppRoutes() {
   useEffect(() => {
     let isActive = true;
     void initializeLineIdentity()
-      .then(async (ready) => {
-        if (!ready || !isActive) return;
+      .then(async (mode) => {
+        if (!mode || !isActive) return;
+        setIsMetaReviewMode(mode === "meta-review");
         const [pages, dashboard] = await Promise.all([getConnectedFacebookPages(), getSavedFacebookDashboard()]);
         if (!isActive) return;
         setFacebookPages(pages);
@@ -120,8 +123,11 @@ function AppRoutes() {
           setHasPagePermission(true);
         }
       })
-      .catch(() => {
-        if (isActive) clearFacebookSession();
+      .catch((error: unknown) => {
+        if (isActive) {
+          clearFacebookSession();
+          setIdentityError(error instanceof Error ? error.message : "ไม่สามารถยืนยันการเข้าใช้งานได้");
+        }
       })
       .finally(() => {
         if (isActive) setIsLineIdentityReady(true);
@@ -210,20 +216,20 @@ function AppRoutes() {
     setWeeklyReport(await getWeeklyFacebookReport(result.page.pageId));
     setHasPagePermission(true);
     setFacebookHandoffCode(null);
-    void activateDashboardRichMenu().catch(() => undefined);
+    if (!isMetaReviewMode) void activateDashboardRichMenu().catch(() => undefined);
   }
 
   async function disconnectSelectedPage() {
     if (!selectedPage) return;
     await disconnectFacebookPage(selectedPage.pageId);
-    void activateConnectRichMenu().catch(() => undefined);
+    if (!isMetaReviewMode) void activateConnectRichMenu().catch(() => undefined);
     clearFacebookSession();
   }
 
   async function deleteSelectedPageData() {
     if (!selectedPage) return;
     await deleteFacebookPageData(selectedPage.pageId);
-    void activateConnectRichMenu().catch(() => undefined);
+    if (!isMetaReviewMode) void activateConnectRichMenu().catch(() => undefined);
     clearFacebookSession();
   }
 
@@ -245,6 +251,30 @@ function AppRoutes() {
           <Typography sx={{ fontSize: 19, fontWeight: 900 }}>กรุณารอสักครู่</Typography>
           <Typography color="text.secondary" sx={{ fontSize: 14 }}>
             กำลังตรวจสอบการเข้าใช้งานผ่าน LINE
+          </Typography>
+        </Box>
+      </MobileAppShell>
+    );
+  }
+
+  if (identityError) {
+    return (
+      <MobileAppShell>
+        <Box
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+            gap: 1.5,
+            justifyContent: "center",
+            minHeight: "calc(100dvh - 150px)",
+            px: 3,
+            textAlign: "center",
+          }}
+        >
+          <Typography sx={{ fontSize: 19, fontWeight: 900 }}>ไม่สามารถเปิดลิงก์สำหรับการตรวจสอบได้</Typography>
+          <Typography color="text.secondary" sx={{ fontSize: 14, lineHeight: 1.55 }}>
+            {identityError}
           </Typography>
         </Box>
       </MobileAppShell>
@@ -317,6 +347,17 @@ function AppRoutes() {
               />
             }
             path="/connect-facebook"
+          />
+          <Route
+            element={
+              <ConnectFacebookPage
+                hasFacebookLogin={hasFacebookLogin}
+                isLoading={isCompletingFacebookLogin}
+                loginError={facebookLoginError}
+                onLogin={startFacebookLogin}
+              />
+            }
+            path="/meta-review"
           />
           <Route
             element={

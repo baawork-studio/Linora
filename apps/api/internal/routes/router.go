@@ -23,7 +23,9 @@ func NewRouter(cfg config.Config, analysisService *services.AnalysisService, fac
 	router.Use(middleware.RateLimit(apiRequestsPerMinute, time.Minute))
 
 	facebookController := controllers.NewFacebookController(facebookService, pageService)
-	requireLineIdentity := middleware.RequireLineIdentity(lineIdentity, cfg.Environment)
+	metaReviewSessions := services.NewMetaReviewSessionService(cfg.MetaReview)
+	metaReviewController := controllers.NewMetaReviewController(metaReviewSessions)
+	requireLineIdentity := middleware.RequireIdentity(lineIdentity, cfg.Environment, metaReviewSessions)
 	if pageService != nil && lineService != nil {
 		integrationController := controllers.NewIntegrationController(pageService, lineService, cfg.Line.ChannelSecret, middleware.NewRateLimiter(lineMessagesPerUserPerMinute, time.Minute))
 		facebook := router.Group("/api/facebook", requireLineIdentity)
@@ -48,6 +50,7 @@ func NewRouter(cfg config.Config, analysisService *services.AnalysisService, fac
 		c.JSON(http.StatusOK, gin.H{"status": "ok", "service": "linora-api"})
 	})
 	router.POST("/api/facebook/login", requireLineIdentity, facebookController.Begin)
+	router.POST("/api/meta-review/session", metaReviewController.CreateSession)
 	router.GET("/api/facebook/callback", facebookController.Callback)
 	router.GET("/api/facebook/session", requireLineIdentity, facebookController.Session)
 	router.POST("/api/facebook/deauthorize", facebookController.Deauthorize)

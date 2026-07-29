@@ -16,13 +16,25 @@ const api = axios.create({
 });
 
 export function setLineIdentityToken(idToken: string) {
-  api.defaults.headers.common.Authorization = `Bearer ${idToken}`;
-  delete api.defaults.headers.common["X-Linora-Dev-User"];
+	api.defaults.headers.common.Authorization = `Bearer ${idToken}`;
+	delete api.defaults.headers.common["X-Linora-Dev-User"];
+	delete api.defaults.headers.common["X-Linora-Review-Session"];
 }
 
 export function setDevelopmentLineUser(userID: string) {
   if (!import.meta.env.DEV) return;
   api.defaults.headers.common["X-Linora-Dev-User"] = userID;
+}
+
+export async function createMetaReviewSession(token: string) {
+	const response = await api.post<{ session: string }>("/api/meta-review/session", { token });
+	return response.data.session;
+}
+
+export function setMetaReviewSession(session: string) {
+	api.defaults.headers.common["X-Linora-Review-Session"] = session;
+	delete api.defaults.headers.common.Authorization;
+	delete api.defaults.headers.common["X-Linora-Dev-User"];
 }
 
 export async function startFacebookLogin() {

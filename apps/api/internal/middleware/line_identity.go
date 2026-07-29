@@ -10,12 +10,36 @@ import (
 
 const lineUserIDKey = "linora.lineUserID"
 
+const MetaReviewSessionHeader = "X-Linora-Review-Session"
+
 type LineIdentityVerifier interface {
 	VerifyIDToken(context.Context, string) (string, error)
 }
 
+type MetaReviewSessionVerifier interface {
+	Verify(string) (string, error)
+}
+
 func RequireLineIdentity(verifier LineIdentityVerifier, environment string) gin.HandlerFunc {
+	return RequireIdentity(verifier, environment, nil)
+}
+
+// RequireIdentity accepts the normal LINE identity or, when explicitly
+// enabled, a short-lived Meta app-review session.
+func RequireIdentity(verifier LineIdentityVerifier, environment string, review MetaReviewSessionVerifier) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		if review != nil {
+			if session := strings.TrimSpace(c.GetHeader(MetaReviewSessionHeader)); session != "" {
+				userID, err := review.Verify(session)
+				if err != nil {
+					c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Meta review session has expired. Please use the review link again."})
+					return
+				}
+				c.Set(lineUserIDKey, userID)
+				c.Next()
+				return
+			}
+		}
 		if strings.EqualFold(environment, "development") {
 			if userID := strings.TrimSpace(c.GetHeader("X-Linora-Dev-User")); userID != "" {
 				c.Set(lineUserIDKey, userID)

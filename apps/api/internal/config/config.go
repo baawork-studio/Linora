@@ -32,6 +32,11 @@ type LineConfig struct {
 	DashboardRichMenuID string
 }
 
+type MetaReviewConfig struct {
+	Enabled bool
+	Token   string
+}
+
 type Config struct {
 	AI            AIConfig
 	DatabaseDSN   string
@@ -39,6 +44,7 @@ type Config struct {
 	Environment   string
 	Facebook      FacebookConfig
 	Line          LineConfig
+	MetaReview    MetaReviewConfig
 	Port          string
 	RedisURL      string
 }
@@ -78,6 +84,10 @@ func Load() (Config, error) {
 			ConnectRichMenuID:   os.Getenv("LINE_RICH_MENU_CONNECT_ID"),
 			DashboardRichMenuID: os.Getenv("LINE_RICH_MENU_DASHBOARD_ID"),
 		},
+		MetaReview: MetaReviewConfig{
+			Enabled: strings.EqualFold(strings.TrimSpace(os.Getenv("META_REVIEW_ENABLED")), "true"),
+			Token:   strings.TrimSpace(os.Getenv("META_REVIEW_TOKEN")),
+		},
 	}
 	if err := cfg.AI.Validate(); err != nil {
 		return Config{}, err
@@ -85,7 +95,17 @@ func Load() (Config, error) {
 	if err := cfg.Facebook.Validate(); err != nil {
 		return Config{}, err
 	}
+	if err := cfg.MetaReview.Validate(); err != nil {
+		return Config{}, err
+	}
 	return cfg, nil
+}
+
+func (c MetaReviewConfig) Validate() error {
+	if c.Enabled && c.Token == "" {
+		return fmt.Errorf("missing required Meta review environment variable: META_REVIEW_TOKEN")
+	}
+	return nil
 }
 
 func (c FacebookConfig) Validate() error {

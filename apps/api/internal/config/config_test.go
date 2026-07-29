@@ -35,3 +35,15 @@ func TestFacebookConfigValidateRequiresEveryEnvironmentValue(t *testing.T) {
 		}
 	}
 }
+
+func TestMetaReviewConfigRequiresTokenOnlyWhenEnabled(t *testing.T) {
+	if err := (MetaReviewConfig{}).Validate(); err != nil {
+		t.Fatalf("disabled review mode should be valid: %v", err)
+	}
+	if err := (MetaReviewConfig{Enabled: true}).Validate(); err == nil {
+		t.Fatal("enabled review mode should require a token")
+	}
+	if err := (MetaReviewConfig{Enabled: true, Token: "review-token"}).Validate(); err != nil {
+		t.Fatalf("enabled review mode with a token should be valid: %v", err)
+	}
+}
