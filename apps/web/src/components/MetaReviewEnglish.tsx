@@ -58,7 +58,9 @@ function translateText(value: string) {
 function translateElement(element: Element) {
   for (const attribute of ["aria-label", "title"]) {
     const value = element.getAttribute(attribute);
-    if (value) element.setAttribute(attribute, translateText(value));
+    if (!value) continue;
+    const translated = translateText(value);
+    if (translated !== value) element.setAttribute(attribute, translated);
   }
 }
 
@@ -72,7 +74,11 @@ export function MetaReviewEnglish({ children }: { children: ReactNode }) {
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       const textNodes: Text[] = [];
       while (walker.nextNode()) textNodes.push(walker.currentNode as Text);
-      for (const node of textNodes) node.nodeValue = translateText(node.nodeValue ?? "");
+      for (const node of textNodes) {
+        const current = node.nodeValue ?? "";
+        const translated = translateText(current);
+        if (translated !== current) node.nodeValue = translated;
+      }
       root.querySelectorAll("*").forEach(translateElement);
     };
     translate();
